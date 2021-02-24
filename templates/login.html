@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <!--Form has POST method to send data to server, action is empty string which ensures that form will take user to same route after it is submitted/posted-->
+        <form method="POST" action = "">
+            <!--form.hidden_tag() is a template argument that generates a hidden field (similar to the fields from wtforms, only hidden from the user) that includes a token that is used to protect the form from Cross Site Request Forgery (CSRF) attacks. This hidden field and a SECRET_KEY are required to protect the form -->
+            {{ form.hidden_tag( ) }}
+            <!--All html classes are just CSS stylings imported form bootstrap-->
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Log In</legend>
+                <!--form.email etc syntax is just accessing the fields of the instance of the form class-->
+                <div class="form-group">
+                    <!--Form label-->
+                    {{ form.email.label(class="form-control-label") }}
+                    <!--If there is an error in submitted username form-->
+                    {% if form.email.errors %}
+                        <!--Display form again, with an 'is-invalid' class-->
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <!--Display error below form-->
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                            <span>
+                                {{ error }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    <!--Code for form itself. Needs to be inside else conditional or number of forms will increase if submitted form is invalid-->
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-control-label") }}
+                    <!--If conditional to check if submitted form is valid and to display appropraite message if invalid-->
+                    <!--If there is an error in submitted password form-->
+                    {% if form.password.errors %}
+                        <!--Display form again, with an 'is-invalid' class-->
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <!--Display error below form-->
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                            <span>
+                                {{ error }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    <!--Code to display form itself. Needs to be inside else conditional or number of forms will increase by one if submitted form is invalid-->
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <!--Remember Me form-->
+                <div class="form-check">
+                    {{ form.remember(class="form-check-input") }}
+                    {{ form.remember.label(class="form-check-label") }}
+                </div>
+            </fieldset>
+            <!--Submit form-->
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info")}}
+            </div>
+            <!--Forget password form and link-->
+            <small class="text-muted ml-2">
+                <a href="#">Forgot Password?</a>
+            </small>
+        </form>
+    </div>
+    <!--Need an account link-->
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            Need an Account? <a class="ml-2" href="{{ url_for('register') }}">Register</a>
+        </small>
+    </div>
+{% endblock content %}
